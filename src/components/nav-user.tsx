@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {Button} from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,7 +26,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {signOut} from "@/lib/auth-client";
+import {signOut, useSession} from "@/lib/auth-client";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {toast} from "sonner";
@@ -40,6 +41,8 @@ export function NavUser({
   };
 }) {
   const {isMobile} = useSidebar();
+
+  const session = useSession();
 
   const router = useRouter();
 
@@ -67,12 +70,27 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarImage
+                  src={
+                    session?.data?.user.image
+                      ? session?.data?.user.image
+                      : user.avatar
+                  }
+                  alt={session?.data?.user.name}
+                />
+                <AvatarFallback className="rounded-lg">
+                  {session?.data?.user.name
+                    ? session?.data?.user.name.charAt(0).toUpperCase()
+                    : "CN"}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-medium">
+                  {session?.data?.user.name}
+                </span>
+                <span className="truncate text-xs">
+                  {session?.data?.user.email}
+                </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -86,12 +104,27 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarImage
+                    src={
+                      session?.data?.user.image
+                        ? session?.data?.user.image
+                        : user.avatar
+                    }
+                    alt={session?.data?.user.name}
+                  />
+                  <AvatarFallback className="rounded-lg">
+                    {session?.data?.user.name
+                      ? session?.data?.user.name.charAt(0).toUpperCase()
+                      : "CN"}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate font-medium">
+                    {session?.data?.user.name}
+                  </span>
+                  <span className="truncate text-xs">
+                    {session?.data?.user.email}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -106,7 +139,9 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <UserCircle2 />
-                <Link href="/dashboard/profile">Profile</Link>
+                <Link href="/dashboard/profile" className="w-full">
+                  Profile
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
@@ -118,7 +153,11 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive" onClick={handleSignOut}>
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={handleSignOut}
+              className="cursor-pointer"
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

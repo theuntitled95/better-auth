@@ -9,8 +9,20 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
+    autoSignIn: false,
     async sendResetPassword(data, request) {
       // Send an email to the user with a link to reset their password
+    },
+  },
+  advanced: {
+    database: {
+      generateId: false,
+    },
+  },
+  socialProviders: {
+    google: {
+      clientId: process.env.AUTH_GOOGLE_ID as string,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
     },
   },
 });

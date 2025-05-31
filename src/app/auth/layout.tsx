@@ -23,7 +23,7 @@ export default async function AuthLayout({
   }
   return (
     <div className="min-h-screen w-full  relative flex justify-center">
-      <div className="bg-white dark:bg-black border-b py-3 flex justify-between items-center border-border absolute z-50 w-full lg:w-8/12 px-4 md:px-1">
+      <div className="bg-transparent backdrop-blur-md border-b py-3 flex justify-between items-center border-border absolute z-50 w-full lg:w-8/12 px-4 md:px-1">
         <Link href="/">
           <div className="flex gap-2 cursor-pointer">
             <svg
@@ -47,7 +47,7 @@ export default async function AuthLayout({
       </div>
       {/* Background Pattern */}
       <div className="absolute inset-0 -z-10 ">
-        <div className="relative h-full w-full bg-red [&>div]:absolute [&>div]:h-full [&>div]:w-full [&>div]:bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [&>div]:[background-size:16px_16px] [&>div]:[mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]">
+        <div className="relative h-full w-full bg-red [&>div]:absolute [&>div]:h-full [&>div]:w-full [&>div]:bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [&>div]:[background-size:16px_16px] [&>div]:[mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] dark:opacity-30">
           <div></div>
         </div>
       </div>

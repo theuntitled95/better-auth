@@ -3,6 +3,7 @@
 import {ChevronRight, Home} from "lucide-react";
 import {usePathname} from "next/navigation";
 
+import {Badge} from "@/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -56,7 +57,9 @@ export function Breadcrumbs() {
         {breadcrumbItems.map((item) => (
           <BreadcrumbItem key={item.href}>
             {item.isLast ? (
-              <BreadcrumbPage>{item.label}</BreadcrumbPage>
+              <BreadcrumbPage>
+                <Badge className="text-sm rounded-full">{item.label}</Badge>
+              </BreadcrumbPage>
             ) : (
               <>
                 <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
