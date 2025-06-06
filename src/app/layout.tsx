@@ -29,6 +29,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
       >
+        <div className="fixed inset-0 -z-10 ">
+          <div className="relative h-full w-full bg-red [&>div]:absolute [&>div]:h-full [&>div]:w-full [&>div]:bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [&>div]:[background-size:16px_16px] [&>div]:[mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] dark:opacity-30">
+            <div></div>
+          </div>
+        </div>
         <NextTopLoader easing="ease" zIndex={1000} showSpinner={false} />
         {children}
         <Toaster position="top-center" richColors theme="system" />

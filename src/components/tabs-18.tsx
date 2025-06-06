@@ -1,7 +1,7 @@
 "use client";
 
 import SignIn from "@/components/auth/sign-in";
-import SignUp from "@/components/auth/sign-up";
+import SignUp from "@/components/auth/sign-up2";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 
 export default function LoginTabs() {
