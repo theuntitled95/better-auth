@@ -1,17 +1,17 @@
-import {AppSidebar} from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 import UnauthorizedRedirect from "@/components/auth/unauthorized-redirect";
 
-import {Separator} from "@/components/ui/separator";
+import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {auth} from "@/lib/auth";
-import type {Metadata} from "next";
-import {headers} from "next/headers";
+import { auth } from "@/lib/auth";
+import type { Metadata } from "next";
+import { headers } from "next/headers";
 import NextTopLoader from "nextjs-toploader";
-import {Breadcrumbs} from "./components/breadcrumbs";
+import { Breadcrumbs } from "./components/breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Dashboard | SAAS",

@@ -1,7 +1,7 @@
-import {redirect} from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default function Page() {
-  redirect("/auth");
+  redirect("/auth/login");
 
   // return (
   //   <div className="relative h-screen">

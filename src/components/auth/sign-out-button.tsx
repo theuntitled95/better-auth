@@ -1,9 +1,10 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
-import {signOut} from "@/lib/auth-client";
-import {useRouter} from "next/navigation";
-import {toast} from "sonner";
+import { Button } from "@/components/ui/button";
+import { signOut } from "@/lib/auth-client";
+import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const SignOutButton = () => {
   const router = useRouter();
@@ -16,14 +17,15 @@ export const SignOutButton = () => {
         },
         onSuccess: () => {
           toast.success("Signed out successfully");
-          router.push("/auth");
+          router.push("/login");
         },
       },
     });
   }
 
   return (
-    <Button onClick={handleClick} asChild>
+    <Button onClick={handleClick} variant={"destructive"} size={"lg"}>
+      <LogOut />
       Log Out
     </Button>
   );

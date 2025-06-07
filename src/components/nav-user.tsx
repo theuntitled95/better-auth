@@ -9,8 +9,7 @@ import {
   UserCircle2,
 } from "lucide-react";
 
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {Button} from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,10 +25,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {signOut, useSession} from "@/lib/auth-client";
+import { signOut, useSession } from "@/lib/auth-client";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
-import {toast} from "sonner";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function NavUser({
   user,
@@ -40,7 +39,7 @@ export function NavUser({
     avatar: string;
   };
 }) {
-  const {isMobile} = useSidebar();
+  const { isMobile } = useSidebar();
 
   const session = useSession();
 
@@ -54,7 +53,7 @@ export function NavUser({
         },
         onSuccess: () => {
           toast.success("Signed out successfully");
-          router.push("/auth");
+          router.push("/auth/login");
         },
       },
     });
@@ -139,7 +138,7 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <UserCircle2 />
-                <Link href="/dashboard/profile" className="w-full">
+                <Link href="/profile" className="w-full">
                   Profile
                 </Link>
               </DropdownMenuItem>

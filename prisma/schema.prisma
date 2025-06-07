@@ -31,9 +31,21 @@ model User {
   email         String @unique
   emailVerified Boolean
   image         String?
+  gender        String?
+  dob           DateTime?
+  phone         String?
+
+  stripeCustomerId String?
+
+  role          String?
+  banned        Boolean?
+  banReason     String?
+  banExpires    DateTime?
 
   sessions      Session[]
   accounts      Account[]
+  members       Member[]
+  invitations   Invitation[]
   posts         Post[]
 
   @@map("users")
@@ -51,6 +63,9 @@ model Session {
 
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy       String?
+  activeOrganizationId String?
 
   @@map("sessions")
 }
@@ -86,4 +101,59 @@ model Verification {
   expiresAt  DateTime
 
   @@map("verifications")
+}
+
+model Organization {
+  id          String       @id @default(uuid())
+  name        String
+  createdAt   DateTime
+  slug        String? @unique
+  logo        String?
+  metadata    String?
+  members     Member[]
+  invitations Invitation[]
+
+  @@map("organization")
+}
+
+model Member {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String
+  createdAt      DateTime
+
+  @@map("member")
+}
+
+model Invitation {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String?
+  status         String
+  expiresAt      DateTime
+  inviterId      String
+  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@map("invitation")
+}
+
+model Subscription {
+  id                   String    @id @default(uuid())
+
+  plan                 String
+  referenceId          String
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  status               String?
+  periodStart          DateTime?
+  periodEnd            DateTime?
+  cancelAtPeriodEnd    Boolean?
+  seats                Int?
+
+  @@map("subscription")
 }

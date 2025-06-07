@@ -1,24 +1,52 @@
-import {prisma} from "@/lib/prisma";
-import {normalizeName} from "@/lib/utils";
-import {betterAuth} from "better-auth";
-import {prismaAdapter} from "better-auth/adapters/prisma";
-import {createAuthMiddleware} from "better-auth/api";
+import { prisma } from "@/lib/prisma";
+import { getSubscription, normalizeName } from "@/lib/utils";
+import { stripe } from "@better-auth/stripe";
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { createAuthMiddleware } from "better-auth/api";
+import { admin, organization } from "better-auth/plugins";
+import Stripe from "stripe";
+
+const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2025-05-28.basil",
+});
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  user: {
+    additionalFields: {
+      gender: {
+        type: "string",
+        label: "Gender",
+        options: ["male", "female", "other"],
+        required: false,
+      },
+      dob: {
+        type: "date",
+        label: "Date of Birth",
+        required: false,
+      },
+      phone: {
+        type: "string",
+        label: "Phone Number",
+        required: false,
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
     autoSignIn: false,
     requireEmailVerification: true,
-    async sendResetPassword(data, request) {
-      // Send an email to the user with a link to reset their password
+    sendResetPassword: async ({ user, url, token }) => {
+      // Send reset password email
     },
+    resetPasswordTokenExpiresIn: 3600, // 1 hour
   },
   emailVerification: {
-    sendVerificationEmail: async ({user, url, token}) => {
+    sendVerificationEmail: async ({ user, url, token }) => {
       // Send an email to the user with a link to verify their email address
     },
     sendOnSignUp: true,
@@ -67,4 +95,34 @@ export const auth = betterAuth({
       clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
     },
   },
+  plugins: [
+    stripe({
+      stripeClient,
+      stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+      createCustomerOnSignUp: true,
+      subscription: {
+        enabled: true,
+        plans: [
+          {
+            name: "pro",
+            freeTrial: {
+              days: 14,
+            },
+          },
+        ],
+      },
+    }),
+    admin(),
+    organization({
+      schema: {
+        member: {
+          modelName: "member",
+        },
+      },
+      allowUserToCreateOrganization: async (user) => {
+        const subscription = await getSubscription(user.id);
+        return subscription?.plan === "pro";
+      },
+    }),
+  ],
 });

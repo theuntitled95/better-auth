@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,16 +9,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {signUp} from "@/lib/auth-client";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {Loader2, X} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { signUp } from "@/lib/auth-client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, X } from "lucide-react";
 import Image from "next/image";
-import {useState} from "react";
-import {useForm} from "react-hook-form";
-import {toast} from "sonner";
-import {z} from "zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 // 1. Zod schema for form validation
 const signUpSchema = z
@@ -45,7 +45,7 @@ export default function SignUp() {
   const {
     register,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
     reset,
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -60,7 +60,7 @@ export default function SignUp() {
         password: data.password,
         name: `${data.firstName} ${data.lastName}`,
         image: image ? await convertImageToBase64(image) : "",
-        callbackURL: "/auth",
+        callbackURL: "/auth/login",
         fetchOptions: {
           onResponse: () => setLoading(false),
           onRequest: () => setLoading(true),
@@ -97,7 +97,9 @@ export default function SignUp() {
   };
 
   return (
-    <Card className="max-w-md rounded-none shadow-sm dark:bg-transparent backdrop-blur-[2px]">
+    <Card
+      className={`mx-auto max-w-md rounded-none shadow-sm backdrop-blur-[2px] animate-duration-250 animate-twice dark:bg-transparent ${errors.firstName || errors.lastName || errors.email || errors.password || errors.passwordConfirmation ? "animate-shake" : ""}`}
+    >
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Register</CardTitle>
         <CardDescription className="text-xs md:text-sm">
@@ -107,7 +109,7 @@ export default function SignUp() {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4 items-start">
+            <div className="grid grid-cols-2 items-start gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="first-name">First name</Label>
                 <Input
@@ -117,7 +119,7 @@ export default function SignUp() {
                   autoComplete="given-name"
                 />
                 {errors.firstName && (
-                  <span className="text-red-500 text-xs">
+                  <span className="text-xs text-red-500">
                     {errors.firstName.message}
                   </span>
                 )}
@@ -131,7 +133,7 @@ export default function SignUp() {
                   autoComplete="family-name"
                 />
                 {errors.lastName && (
-                  <span className="text-red-500 text-xs">
+                  <span className="text-xs text-red-500">
                     {errors.lastName.message}
                   </span>
                 )}
@@ -147,7 +149,7 @@ export default function SignUp() {
                 autoComplete="email"
               />
               {errors.email && (
-                <span className="text-red-500 text-xs">
+                <span className="text-xs text-red-500">
                   {errors.email.message}
                 </span>
               )}
@@ -162,7 +164,7 @@ export default function SignUp() {
                 placeholder="Password"
               />
               {errors.password && (
-                <span className="text-red-500 text-xs">
+                <span className="text-xs text-red-500">
                   {errors.password.message}
                 </span>
               )}
@@ -177,7 +179,7 @@ export default function SignUp() {
                 placeholder="Confirm Password"
               />
               {errors.passwordConfirmation && (
-                <span className="text-red-500 text-xs">
+                <span className="text-xs text-red-500">
                   {errors.passwordConfirmation.message}
                 </span>
               )}
@@ -186,7 +188,7 @@ export default function SignUp() {
               <Label htmlFor="image">Profile Image (optional)</Label>
               <div className="flex items-end gap-4">
                 {imagePreview && (
-                  <div className="relative w-16 h-16 rounded-sm overflow-hidden">
+                  <div className="relative h-16 w-16 overflow-hidden rounded-sm">
                     <Image
                       src={imagePreview}
                       alt="Profile preview"
@@ -195,7 +197,7 @@ export default function SignUp() {
                     />
                   </div>
                 )}
-                <div className="flex items-center gap-2 w-full">
+                <div className="flex w-full items-center gap-2">
                   <Input
                     id="image"
                     type="file"
@@ -224,6 +226,12 @@ export default function SignUp() {
             </Button>
           </div>
         </form>
+        <div className="mt-4 text-center text-xs">
+          Already have an account?{" "}
+          <a href="/auth/login" className="underline">
+            Login
+          </a>
+        </div>
       </CardContent>
     </Card>
   );

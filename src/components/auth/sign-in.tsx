@@ -1,6 +1,6 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,16 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {Checkbox} from "@/components/ui/checkbox";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {signIn} from "@/lib/auth-client";
-import {cn} from "@/lib/utils";
-import {Loader2} from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { signIn } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
-import {useState} from "react";
-import {toast} from "sonner";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -27,7 +27,7 @@ export default function SignIn() {
   const router = useRouter();
 
   return (
-    <Card className="max-w-md rounded-none shadow-sm dark:bg-transparent backdrop-blur-[2px]">
+    <Card className="mx-auto max-w-md shadow-sm backdrop-blur-[2px] dark:bg-transparent">
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Login</CardTitle>
         <CardDescription className="text-xs md:text-sm">
@@ -105,11 +105,11 @@ export default function SignIn() {
 
                     onSuccess: async () => {
                       toast.success(
-                        "Logged in successfully. Good to see you again!"
+                        "Logged in successfully. Good to see you again!",
                       );
-                      router.push("/dashboard");
+                      router.push("/profile");
                     },
-                  }
+                  },
                 );
               }}
             >
@@ -122,8 +122,8 @@ export default function SignIn() {
 
             <div
               className={cn(
-                "w-full gap-2 flex items-center",
-                "justify-between flex-col"
+                "flex w-full items-center gap-2",
+                "flex-col justify-between",
               )}
             >
               <Button
@@ -149,7 +149,7 @@ export default function SignIn() {
                       onSuccess: async () => {
                         router.push("/dashboard");
                       },
-                    }
+                    },
                   );
                 }}
               >
@@ -202,7 +202,7 @@ export default function SignIn() {
                         onSuccess: async () => {
                           router.push("/dashboard");
                         },
-                      }
+                      },
                     );
                   }}
                 >
@@ -223,6 +223,12 @@ export default function SignIn() {
             </div>
           </div>
         </form>
+        <div className="mt-4 text-center text-xs">
+          Don&apos;t have an account?{" "}
+          <Link href="/auth/register" className="underline">
+            Register
+          </Link>
+        </div>
       </CardContent>
     </Card>
   );
