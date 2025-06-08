@@ -1,5 +1,7 @@
+import { getActiveSubscription } from "@/actions/sub";
+import { plans } from "@/constants/plans";
 import { prisma } from "@/lib/prisma";
-import { getSubscription, normalizeName } from "@/lib/utils";
+import { normalizeName } from "@/lib/utils";
 import { stripe } from "@better-auth/stripe";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
@@ -7,9 +9,7 @@ import { createAuthMiddleware } from "better-auth/api";
 import { admin, organization } from "better-auth/plugins";
 import Stripe from "stripe";
 
-const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-05-28.basil",
-});
+const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -41,12 +41,14 @@ export const auth = betterAuth({
     autoSignIn: false,
     requireEmailVerification: true,
     sendResetPassword: async ({ user, url, token }) => {
+      console.log("Reset password URL: ", url);
       // Send reset password email
     },
     resetPasswordTokenExpiresIn: 3600, // 1 hour
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }) => {
+      console.log("Verification URL to verify the email: ", url);
       // Send an email to the user with a link to verify their email address
     },
     sendOnSignUp: true,
@@ -102,14 +104,7 @@ export const auth = betterAuth({
       createCustomerOnSignUp: true,
       subscription: {
         enabled: true,
-        plans: [
-          {
-            name: "pro",
-            freeTrial: {
-              days: 14,
-            },
-          },
-        ],
+        plans: plans,
       },
     }),
     admin(),
@@ -119,9 +114,9 @@ export const auth = betterAuth({
           modelName: "member",
         },
       },
-      allowUserToCreateOrganization: async (user) => {
-        const subscription = await getSubscription(user.id);
-        return subscription?.plan === "pro";
+      allowUserToCreateOrganization: async () => {
+        const subscription = await getActiveSubscription();
+        return subscription?.subscription?.plan === "plus";
       },
     }),
   ],
