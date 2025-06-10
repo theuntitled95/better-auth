@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Plan {
   name: string;
+  description?: string;
   priceId: string;
   limits: any;
   features: string[];
   price: number;
+  popular?: boolean;
 }
 
 export const plans: Plan[] = [
@@ -25,6 +27,7 @@ export const plans: Plan[] = [
     },
     features: ["Gives you access to plus features of the app"],
     price: 19.99,
+    popular: true,
   },
   {
     name: "pro",

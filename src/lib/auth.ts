@@ -116,7 +116,7 @@ export const auth = betterAuth({
       },
       allowUserToCreateOrganization: async () => {
         const subscription = await getActiveSubscription();
-        return subscription?.subscription?.plan === "plus";
+        return !!subscription?.subscription?.plan;
       },
     }),
   ],

@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  BookOpen,
-  Bot,
   Command,
   CreditCard,
   Frame,
@@ -10,15 +8,14 @@ import {
   Map,
   PieChart,
   Send,
-  Settings2,
-  SquareTerminal,
 } from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
-import { NavSecondary } from "@/components/nav-secondary";
+// import { NavProjects } from "@/components/nav-projects";
+// import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
+import { Badge } from "@/components/ui/badge";
 import {
   Sidebar,
   SidebarContent,
@@ -28,6 +25,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
+import { Button } from "./ui/button";
 
 const data = {
   user: {
@@ -166,21 +166,46 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: organizations } = authClient.useListOrganizations();
+  const activeOrg = authClient.useActiveOrganization();
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
-                </div>
-              </a>
+              <Button asChild className="bg-transparent text-primary">
+                <a href="#">
+                  {activeOrg.data?.logo ? (
+                    <Image
+                      src={activeOrg.data?.logo || "/assets/user-profile.svg"}
+                      alt={`${activeOrg.data?.name} Logo`}
+                      width={24}
+                      height={24}
+                      className="rounded-full border bg-background object-cover"
+                    />
+                  ) : (
+                    <div className="flex aspect-square size-8 items-center justify-center rounded-[0.25rem] bg-sidebar-primary text-sidebar-primary-foreground">
+                      <Command className="size-4" />
+                    </div>
+                  )}
+                  <div className="relative grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-medium">
+                      {activeOrg.data?.name}
+                      <p className="truncate text-[10px] text-muted-foreground">
+                        {activeOrg.data?.slug}
+                      </p>
+                    </span>
+                    <Badge
+                      className="absolute top-1/2 right-1 -translate-y-1/2 truncate rounded-full border-primary text-[10px]"
+                      variant={"outline"}
+                    >
+                      Current
+                    </Badge>
+                  </div>
+                </a>
+              </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

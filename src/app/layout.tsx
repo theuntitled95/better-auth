@@ -1,3 +1,4 @@
+import BgPattern from "@/components/bg-pattern";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
@@ -29,11 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
       >
-        <div className="fixed inset-0 -z-10">
+        {/* <div className="fixed inset-0 -z-10">
           <div className="bg-red relative h-full w-full dark:opacity-30 [&>div]:absolute [&>div]:h-full [&>div]:w-full [&>div]:bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [&>div]:[mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] [&>div]:[background-size:16px_16px]">
             <div></div>
           </div>
-        </div>
+        </div> */}
+        <BgPattern />
         <NextTopLoader easing="ease" zIndex={1000} showSpinner={false} />
         {children}
         <Toaster position="top-center" richColors theme="system" />

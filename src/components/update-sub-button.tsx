@@ -2,6 +2,7 @@
 import { updateExistingSubscription } from "@/actions/sub";
 import { Button } from "@/components/ui/button";
 import { Plan } from "@/constants/plans";
+import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -10,10 +11,12 @@ export default function UpdateSubscription({
   buttonText,
   plan,
   subId,
+  className,
 }: {
-  buttonText: string;
+  buttonText: string | React.ReactNode;
   plan: Plan;
   subId: string;
+  className?: string;
 }) {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
@@ -39,7 +42,11 @@ export default function UpdateSubscription({
     }
   };
   return (
-    <Button disabled={isPending} onClick={handleSubUpdate}>
+    <Button
+      disabled={isPending}
+      onClick={handleSubUpdate}
+      className={cn(className)}
+    >
       {buttonText}
     </Button>
   );

@@ -4,12 +4,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toProperCase } from "@/lib/utils";
-import { Building2, ChevronRight, Loader2, Plus } from "lucide-react";
+import { Building2, ChevronRight, Command, Loader2, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export function OrganizationSection() {
+type OrganizationSectionProps = {
+  subscription?: { plan?: string | null };
+};
+
+export function OrganizationSection({
+  subscription,
+}: OrganizationSectionProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [orgs, setOrgs] = useState<any[]>([]);
   const [search, setSearch] = useState("");
@@ -34,6 +40,20 @@ export function OrganizationSection() {
   const filtered = orgs.filter((org) =>
     org.name.toLowerCase().includes(search.toLowerCase()),
   );
+
+  // If no active subscription plan, show message and link
+  if (!subscription?.plan) {
+    return (
+      <div className="my-4 flex flex-col items-center border p-4">
+        <span className="mb-2">
+          You are currently not subscribed to a plan.
+        </span>
+        <Button asChild size={"lg"}>
+          <Link href="/dashboard/billing/subscriptions">View Plans</Link>
+        </Button>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -95,13 +115,20 @@ export function OrganizationSection() {
                 <div className="flex items-center gap-4">
                   {/* Org Logo */}
 
-                  <Image
-                    src={org.logo || "/assets/user-profile.svg"}
-                    alt={`${org.name} Logo`}
-                    width={24}
-                    height={24}
-                    className="rounded-full border bg-background object-cover"
-                  />
+                  {org.logo ? (
+                    <Image
+                      src={org.logo || "/assets/user-profile.svg"}
+                      alt={`${org.name} Logo`}
+                      width={24}
+                      height={24}
+                      className="rounded-full border bg-background object-cover"
+                    />
+                  ) : (
+                    <div className="flex aspect-square size-8 items-center justify-center rounded-[0.25rem] bg-sidebar-primary text-sidebar-primary-foreground">
+                      <Command className="size-4" />
+                    </div>
+                  )}
+
                   {/* <img src={org.logo} alt={`${org.name} Logo`} className="w-6 h-6 rounded-full border bg-background object-cover" /> */}
 
                   <span className="group-hover:underline group-focus:underline">
@@ -115,6 +142,7 @@ export function OrganizationSection() {
                         "",
                     )}
                   </Badge>
+                  <p>{org.id}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <p className="pointer-events-none invisible -translate-x-2 text-xs text-muted-foreground opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-x-0 group-hover:opacity-100 group-focus:visible group-focus:translate-x-0 group-focus:opacity-100">

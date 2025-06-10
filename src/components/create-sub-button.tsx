@@ -3,13 +3,16 @@
 import { Button } from "@/components/ui/button";
 import { Plan } from "@/constants/plans";
 import { authClient } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 
 export default function CreateSubButton({
   buttonText,
   plan,
+  className,
 }: {
-  buttonText: string;
+  buttonText: string | React.ReactNode;
   plan: Plan;
+  className?: string;
 }) {
   const handleSubCreation = async () => {
     try {
@@ -26,7 +29,7 @@ export default function CreateSubButton({
     }
   };
   return (
-    <Button onClick={handleSubCreation} className="w-full">
+    <Button onClick={handleSubCreation} className={cn(className)}>
       {buttonText}
     </Button>
   );

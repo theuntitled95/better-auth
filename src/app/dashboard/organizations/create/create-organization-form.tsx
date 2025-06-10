@@ -49,10 +49,13 @@ export function CreateOrganizationForm() {
         },
         onSuccess: () => {
           toast.success("Organization created!");
+          console.log(
+            "Organization created! you are about to be redirected to: ",
+            `/dashboard/organizations/${res.data?.slug}`,
+          );
           router.push(`/dashboard/organizations/${res.data?.slug}`);
         },
         onError: (ctx) => {
-          console.log(ctx);
           toast.error(ctx.error.message);
         },
       },
