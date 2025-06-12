@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { authClient } from "@/lib/auth-client";
 import { toProperCase } from "@/lib/utils";
 import { Building2, ChevronRight, Command, Loader2, Plus } from "lucide-react";
 import Image from "next/image";
@@ -111,6 +112,11 @@ export function OrganizationSection({
               <Link
                 href={`/dashboard/organizations/${org.slug}`}
                 className="group flex items-center justify-between p-2 outline-none hover:bg-foreground/10 focus:bg-foreground/10"
+                onClick={async () => {
+                  await authClient.organization.setActive({
+                    organizationId: org.id,
+                  });
+                }}
               >
                 <div className="flex items-center gap-4">
                   {/* Org Logo */}
@@ -131,10 +137,14 @@ export function OrganizationSection({
 
                   {/* <img src={org.logo} alt={`${org.name} Logo`} className="w-6 h-6 rounded-full border bg-background object-cover" /> */}
 
-                  <span className="group-hover:underline group-focus:underline">
-                    {org.name}
-                  </span>
-                  <Badge className="rounded-full">
+                  <div className="flex flex-col group-hover:underline group-focus:underline">
+                    <p className="text-sm font-medium">{org.name}</p>
+                    <p className="text-xs text-muted-foreground">{org.slug}</p>
+                  </div>
+                  <Badge
+                    className="ms-auto rounded-full border-primary text-xs"
+                    variant={"outline"}
+                  >
                     {toProperCase(
                       org.member?.role ||
                         org.membership?.role ||
@@ -142,7 +152,6 @@ export function OrganizationSection({
                         "",
                     )}
                   </Badge>
-                  <p>{org.id}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <p className="pointer-events-none invisible -translate-x-2 text-xs text-muted-foreground opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-x-0 group-hover:opacity-100 group-focus:visible group-focus:translate-x-0 group-focus:opacity-100">

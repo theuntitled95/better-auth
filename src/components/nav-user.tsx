@@ -58,6 +58,7 @@ export function NavUser({
       },
     });
   }
+  console.log(session?.data?.user.image);
 
   return (
     <SidebarMenu>
@@ -77,6 +78,7 @@ export function NavUser({
                   }
                   alt={session?.data?.user.name}
                 />
+                {/* <img src={session?.data?.user.image} alt={user.name} /> */}
                 <AvatarFallback className="rounded-lg">
                   {session?.data?.user.name
                     ? session?.data?.user.name.charAt(0).toUpperCase()

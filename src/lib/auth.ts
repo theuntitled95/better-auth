@@ -80,8 +80,10 @@ export const auth = betterAuth({
       generateId: false,
     },
     ipAddress: {
+      header: "x-forwarded-for",
       ipAddressHeaders: ["x-client-ip", "x-forwarded-for"],
       disableIpTracking: false,
+      trustedProxy: true,
     },
   },
   account: {
