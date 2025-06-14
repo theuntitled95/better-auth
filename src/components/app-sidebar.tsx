@@ -1,11 +1,20 @@
 "use client";
 
-import { CreditCard, Frame, LifeBuoy, Map, PieChart, Send } from "lucide-react";
+import {
+  CreditCard,
+  Frame,
+  LifeBuoy,
+  Map,
+  PieChart,
+  Send,
+  ShieldUser,
+} from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
 // import { NavProjects } from "@/components/nav-projects";
 // import { NavSecondary } from "@/components/nav-secondary";
+import { NavAdmin } from "@/components/nav-admin";
 import { NavUser } from "@/components/nav-user";
 import OrganizationSelector from "@/components/organization-selector";
 import {
@@ -16,6 +25,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useSession } from "@/lib/auth-client";
 
 const data = {
   user: {
@@ -122,6 +132,24 @@ const data = {
       ],
     },
   ],
+  adminNav: [
+    {
+      title: "Admin",
+      icon: ShieldUser,
+      url: "#",
+      isActive: true,
+      items: [
+        {
+          title: "Users",
+          url: "/dashboard/admin/users",
+        },
+        {
+          title: "Organizations",
+          url: "/dashboard/admin/organizations",
+        },
+      ],
+    },
+  ],
   navSecondary: [
     {
       title: "Support",
@@ -154,6 +182,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const session = useSession();
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -164,6 +193,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        {session.data?.user.role === "ADMIN" && (
+          <NavAdmin items={data.adminNav} className="mt-4" />
+        )}
         <NavMain items={data.navMain} />
         {/* <NavProjects projects={data.projects} /> */}
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}

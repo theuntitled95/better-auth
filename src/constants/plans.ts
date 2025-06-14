@@ -7,6 +7,7 @@ export interface Plan {
   features: string[];
   price: number;
   popular?: boolean;
+  trialDays?: number;
 }
 
 export const plans: Plan[] = [
@@ -18,6 +19,7 @@ export const plans: Plan[] = [
     },
     features: ["Gives you access to basic features of the app"],
     price: 9.99,
+    trialDays: 7,
   },
   {
     name: "plus",
@@ -28,6 +30,7 @@ export const plans: Plan[] = [
     features: ["Gives you access to plus features of the app"],
     price: 19.99,
     popular: true,
+    trialDays: 7,
   },
   {
     name: "pro",
@@ -37,5 +40,6 @@ export const plans: Plan[] = [
     },
     features: ["Gives you access to pro features of the app"],
     price: 199.99,
+    trialDays: 7,
   },
 ];

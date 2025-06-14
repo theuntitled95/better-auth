@@ -7,9 +7,12 @@ import { toast } from "sonner";
 
 type CancelSubButtonProps = {
   className?: string;
+  children: React.ReactNode;
 };
-
-export default function CancelSubButton({ className }: CancelSubButtonProps) {
+export default function CancelSubButton({
+  className,
+  children,
+}: CancelSubButtonProps) {
   async function handleSubCancellation() {
     try {
       await authClient.subscription.cancel({
@@ -28,7 +31,7 @@ export default function CancelSubButton({ className }: CancelSubButtonProps) {
 
   return (
     <Button onClick={handleSubCancellation} className={cn(className)}>
-      Cancel Subscription
+      {children}
     </Button>
   );
 }

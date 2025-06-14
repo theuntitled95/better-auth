@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { ac, roles } from "@/lib/permissions";
 import { stripeClient } from "@better-auth/stripe/client";
 import {
   adminClient,
@@ -10,7 +11,7 @@ import { createAuthClient } from "better-auth/react";
 export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   plugins: [
-    adminClient(),
+    adminClient({ ac, roles }),
     organizationClient(),
     stripeClient({
       subscription: true, //if you want to enable subscription management

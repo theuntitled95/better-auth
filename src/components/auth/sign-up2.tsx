@@ -15,6 +15,7 @@ import { signUp } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -52,6 +53,7 @@ export default function SignUp() {
   });
 
   // 3. Handle form submit
+  const router = useRouter();
   const onSubmit = async (data: SignUpFormValues) => {
     setLoading(true);
     try {
@@ -61,6 +63,7 @@ export default function SignUp() {
         name: `${data.firstName} ${data.lastName}`,
         image: image ? await convertImageToBase64(image) : "",
         callbackURL: "/auth/login",
+        trialAllowed: true,
         fetchOptions: {
           onResponse: () => setLoading(false),
           onRequest: () => setLoading(true),
@@ -74,6 +77,7 @@ export default function SignUp() {
             setImage(null);
             setImagePreview(null);
             setLoading(false);
+            router.push("/auth/login");
           },
         },
       });

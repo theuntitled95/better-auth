@@ -137,7 +137,14 @@ export async function SubscriptionSection() {
                   </AlertDescription>
                 </Alert>
               ) : (
-                <CancelSubButton />
+                <CancelSubButton
+                  className={`${buttonVariants({
+                    size: "lg",
+                    variant: "outline",
+                  })} w-full text-primary`}
+                >
+                  Cancel Subscription
+                </CancelSubButton>
               )}
               <Link
                 href={"/dashboard/billing/subscriptions"}

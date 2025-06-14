@@ -15,9 +15,11 @@ import {
 } from "@/components/ui/card";
 import UpdateSubButton from "@/components/update-sub-button";
 import { plans } from "@/constants/plans";
+import { auth } from "@/lib/auth";
 import { toProperCase } from "@/lib/utils";
 import { ArrowLeftRight } from "lucide-react";
 import { Metadata } from "next";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Manage Subscriptions",
@@ -25,6 +27,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SubscriptionPage() {
+  const session = await auth.api.getSession({ headers: await headers() });
   const data = await getActiveSubscription();
   const activeSub = data.subscription;
 
@@ -81,7 +84,7 @@ export default async function SubscriptionPage() {
                   ))}
                 </ul>
               </CardContent>
-              <CardFooter className="mt-auto">
+              <CardFooter className="mt-auto flex flex-col gap-4">
                 {activeSub?.plan === plan.name ? (
                   <>
                     {activeSub.cancelAtPeriodEnd ? (
@@ -106,7 +109,9 @@ export default async function SubscriptionPage() {
                             size: "lg",
                             variant: "outline",
                           })} text-primary`}
-                        />
+                        >
+                          Cancel Subscription
+                        </CancelSubButton>
                       </div>
                     )}
                   </>
@@ -123,6 +128,12 @@ export default async function SubscriptionPage() {
                     plan={plan}
                     className={`${buttonVariants({ size: "lg" })} w-full`}
                   />
+                )}
+
+                {session?.user.trialAllowed && (
+                  <p className="text-xs text-muted-foreground">
+                    Includes {plan.trialDays}-days trial
+                  </p>
                 )}
               </CardFooter>
             </Card>

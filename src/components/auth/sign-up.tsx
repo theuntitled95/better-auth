@@ -1,6 +1,6 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,14 +8,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {signUp} from "@/lib/auth-client";
-import {Loader2, X} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { signUp } from "@/lib/auth-client";
+import { Loader2, X } from "lucide-react";
 import Image from "next/image";
-import {useRouter} from "next/navigation";
-import {useState} from "react";
-import {toast} from "sonner";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -41,7 +41,7 @@ export default function SignUp() {
   };
 
   return (
-    <Card className="max-w-md rounded-none shadow-sm dark:bg-transparent backdrop-blur-[2px]">
+    <Card className="max-w-md rounded-none shadow-sm backdrop-blur-[2px] dark:bg-transparent">
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Register</CardTitle>
         <CardDescription className="text-xs md:text-sm">
@@ -116,7 +116,7 @@ export default function SignUp() {
               <Label htmlFor="image">Profile Image (optional)</Label>
               <div className="flex items-end gap-4">
                 {imagePreview && (
-                  <div className="relative w-16 h-16 rounded-sm overflow-hidden">
+                  <div className="relative h-16 w-16 overflow-hidden rounded-sm">
                     <Image
                       src={imagePreview}
                       alt="Profile preview"
@@ -125,7 +125,7 @@ export default function SignUp() {
                     />
                   </div>
                 )}
-                <div className="flex items-center gap-2 w-full">
+                <div className="flex w-full items-center gap-2">
                   <Input
                     id="image"
                     type="file"
@@ -167,7 +167,7 @@ export default function SignUp() {
                       toast.error(ctx.error.message);
                     },
                     onSuccess: async () => {
-                      router.push("/dashboard");
+                      router.push("/auth/login");
                     },
                   },
                 });

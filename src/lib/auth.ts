@@ -1,11 +1,14 @@
 import { getActiveSubscription } from "@/actions/sub";
-import { plans } from "@/constants/plans";
+import { Plan, plans } from "@/constants/plans";
+import { UserRole } from "@/generated/prisma";
+import { ac, roles } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { normalizeName } from "@/lib/utils";
 import { stripe } from "@better-auth/stripe";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
+import { nextCookies } from "better-auth/next-js";
 import { admin, organization } from "better-auth/plugins";
 import Stripe from "stripe";
 
@@ -32,6 +35,11 @@ export const auth = betterAuth({
         type: "string",
         label: "Phone Number",
         required: false,
+      },
+      trialAllowed: {
+        type: "boolean",
+        label: "Trial Allowed",
+        required: true,
       },
     },
   },
@@ -100,6 +108,7 @@ export const auth = betterAuth({
     },
   },
   plugins: [
+    nextCookies(),
     stripe({
       stripeClient,
       stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
@@ -107,9 +116,42 @@ export const auth = betterAuth({
       subscription: {
         enabled: true,
         plans: plans,
+        getCheckoutSessionParams: async ({ user, plan }) => {
+          const checkoutSession: {
+            params: {
+              subscription_data?: {
+                trial_period_days: number;
+              };
+            };
+          } = {
+            params: {},
+          };
+          if (user.trialAllowed) {
+            checkoutSession.params.subscription_data = {
+              trial_period_days: (plan as Plan).trialDays,
+            };
+          }
+          return checkoutSession;
+        },
+        onSubscriptionComplete: async ({ event }) => {
+          const eventDataObject = event.data.object as Stripe.Checkout.Session;
+          const userId = eventDataObject.metadata?.userId;
+
+          console.log("Settings trialAllowed to false");
+          await prisma.user.update({
+            where: { id: userId },
+            data: { trialAllowed: false },
+          });
+        },
       },
     }),
-    admin(),
+    // Import or define the Role type and use its values
+    admin({
+      adminRoles: UserRole.ADMIN,
+      defaultRole: UserRole.USER,
+      ac,
+      roles,
+    }),
     organization({
       schema: {
         member: {
