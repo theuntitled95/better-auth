@@ -48,6 +48,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import { toProperCase } from "@/lib/utils";
 import { UserWithRole } from "better-auth/plugins";
 import {
   Edit,
@@ -60,6 +61,7 @@ import {
   UserCheck,
   UserX,
 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 type AdminUserManagementProps = {
@@ -133,7 +135,7 @@ export default function AdminUserManagement({
 
   return (
     <div className="container mx-auto space-y-6 p-6">
-      <Card>
+      <Card className="rounded-none">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">User Management</CardTitle>
           <CardDescription>
@@ -151,7 +153,10 @@ export default function AdminUserManagement({
                 className="pl-8"
               />
             </div>
-            <Badge variant="secondary" className="ml-auto">
+            <Badge
+              variant="secondary"
+              className="ms-auto rounded-full border-primary/20"
+            >
               Total Users: {users.length}
             </Badge>
           </div>
@@ -196,14 +201,17 @@ export default function AdminUserManagement({
                     <TableCell>
                       <div className="flex flex-col">
                         <span>{user.email}</span>
-                        <div className="mt-1 flex items-center space-x-1">
+                        <div className="mt-0.5 flex items-center space-x-1">
                           {user.emailVerified ? (
-                            <Badge variant="default" className="text-xs">
+                            <Badge variant="default" className="rounded-full">
                               <UserCheck className="mr-1 h-3 w-3" />
                               Verified
                             </Badge>
                           ) : (
-                            <Badge variant="secondary" className="text-xs">
+                            <Badge
+                              variant="secondary"
+                              className="rounded-full border-primary/20"
+                            >
                               <UserX className="mr-1 h-3 w-3" />
                               Unverified
                             </Badge>
@@ -216,21 +224,25 @@ export default function AdminUserManagement({
                         variant={
                           user.role === "ADMIN" ? "default" : "secondary"
                         }
+                        className={`rounded-full ${user.role === "ADMIN" ? "" : "border-primary/20"} `}
                       >
                         {user.role === "ADMIN" && (
                           <Shield className="mr-1 h-3 w-3" />
                         )}
-                        {user.role}
+                        {toProperCase(user.role || "")}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       {user.banned ? (
-                        <Badge variant="destructive">
-                          <ShieldOff className="mr-1 h-3 w-3" />
+                        <Badge variant="destructive" className="rounded-full">
+                          <ShieldOff className="me-1 h-3 w-3" />
                           Banned
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="text-green-600">
+                        <Badge
+                          variant="outline"
+                          className="rounded-full text-success"
+                        >
                           Active
                         </Badge>
                       )}
@@ -253,12 +265,17 @@ export default function AdminUserManagement({
                             <DialogTrigger asChild>
                               <DropdownMenuItem
                                 onSelect={(e) => e.preventDefault()}
+                                asChild
                               >
-                                <Eye className="mr-2 h-4 w-4" />
-                                View Details
+                                <Link
+                                  href={`/dashboard/admin/user?userId=${user.id}`}
+                                >
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  View Details
+                                </Link>
                               </DropdownMenuItem>
                             </DialogTrigger>
-                            <DialogContent className="max-w-2xl">
+                            <DialogContent className="max-w-2xl bg-transparent backdrop-blur-2xl">
                               <DialogHeader>
                                 <DialogTitle>User Details</DialogTitle>
                                 <DialogDescription>
