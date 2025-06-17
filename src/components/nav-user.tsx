@@ -30,15 +30,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
 
   const session = useSession();
@@ -72,9 +64,7 @@ export function NavUser({
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
                   src={
-                    session?.data?.user.image
-                      ? session?.data?.user.image
-                      : user.avatar
+                    session?.data?.user.image ? session?.data?.user.image : ""
                   }
                   alt={session?.data?.user.name}
                 />
@@ -107,9 +97,7 @@ export function NavUser({
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
                     src={
-                      session?.data?.user.image
-                        ? session?.data?.user.image
-                        : user.avatar
+                      session?.data?.user.image ? session?.data?.user.image : ""
                     }
                     alt={session?.data?.user.name}
                   />

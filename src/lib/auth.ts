@@ -162,6 +162,17 @@ export const auth = betterAuth({
         const subscription = await getActiveSubscription();
         return !!subscription?.subscription?.plan;
       },
+      ac,
+      sendInvitationEmail: async (data) => {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/accept-invitation?id=${data.id}`;
+        console.log("Invitation URL: ", url);
+        // TODO: Build sendEmail function e.g. below
+        // await sendEmail(
+        //   data.email,
+        //   "Invitation to join organization",
+        //   `Click the link to join the organization: ${url}`,
+        // );
+      },
     }),
   ],
 });

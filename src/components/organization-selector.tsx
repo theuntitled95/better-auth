@@ -139,6 +139,13 @@ export default function OrganizationSelector() {
 
   /* ------------------------------- UI ------------------------------- */
 
+  if (!activeOrg)
+    return (
+      <div className="flex items-center justify-center border p-4 text-sm text-muted-foreground">
+        <span>No Organizations Found</span>
+      </div>
+    );
+
   return (
     <Dialog>
       {/* ---------- sidebar trigger ---------- */}

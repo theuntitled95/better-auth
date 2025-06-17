@@ -28,12 +28,10 @@ export default async function UserDetailsPage({
     headers: await headers(),
   });
 
+  // TODO: Build function to fetch selected user's organization memberships
   const organizations = await auth.api.listOrganizations({
     headers: await headers(),
-    query: {
-      filterField: "userId",
-      filterValue: userId,
-    },
+    query: {},
   });
 
   if (!user) {

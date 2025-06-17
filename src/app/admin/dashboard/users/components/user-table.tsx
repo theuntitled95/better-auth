@@ -268,7 +268,7 @@ export default function AdminUserManagement({
                                 asChild
                               >
                                 <Link
-                                  href={`/dashboard/admin/user?userId=${user.id}`}
+                                  href={`/admin/dashboard/user?userId=${user.id}`}
                                 >
                                   <Eye className="mr-2 h-4 w-4" />
                                   View Details
